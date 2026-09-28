@@ -25,6 +25,24 @@ define Build/mt7981-bl31-uboot
 	cat $(STAGING_DIR_IMAGE)/mt7981_$1-u-boot.fip >> $@
 endef
 
+define Device/ZX7981PG
+  DEVICE_VENDOR := ZX
+  DEVICE_MODEL := ZX7981PG
+  DEVICE_DTS := mt7981b-ZX7981PG
+  DEVICE_DTS_DIR := ../dts
+  SUPPORTED_DEVICES += ZX7981PG
+  DEVICE_PACKAGES := kmod-mt7915e kmod-mt7981-firmware mt7981-wo-firmware kmod-usb3
+  UBINIZE_OPTS := -E 5
+  BLOCKSIZE := 128k
+  PAGESIZE := 2048
+  IMAGE_SIZE := 115328k
+  KERNEL_IN_UBI := 1
+  IMAGES += factory.bin
+  IMAGE/factory.bin := append-ubi | check-size $$$$(IMAGE_SIZE)
+  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
+endef
+TARGET_DEVICES += ZX7981PG
+
 define Build/mt7986-bl2
 	cat $(STAGING_DIR_IMAGE)/mt7986-$1-bl2.img >> $@
 endef
